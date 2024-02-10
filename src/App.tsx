@@ -1,26 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import MainPage from './components/MainPage'; // Import MainPage component
+import SearchView from './components/SearchView'; // Import SearchView component
+import MovieDetails from './components/MovieDetails'; // Import MovieDetails component
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router basename=""> {/* Wrap your routes with the Router component */}
+      <Routes> {/* Use the Routes component to define your routes */}
+        <Route path="/tvapp" element={<MainPage />} /> {/* Define a route for the root path, rendering MainPage */}
+        <Route path="/search" element={<SearchView />} /> {/* Define a route for "/search" path, rendering SearchView */}
+        <Route path="/details/:id" element={<MovieDetails />} /> {/* Define a route for "/details/:id" path, rendering MovieDetails */}
+      </Routes>
+    </Router>
   );
 }
 
-export default App;
+export default App; // Export the App component as default
