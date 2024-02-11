@@ -1,0 +1,27 @@
+
+.show-grid-wrapper {
+    margin: 0 10%; /* 3% margin on each side */
+  }
+
+.show-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .show-card {
+    border: 1px solid #000000;
+    padding: 10px;
+    text-align: left;
+    color: white;
+  }
+  
+  .show-card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .show-card .rating-stars {
+    color: rgb(177, 160, 66); /* Change the color to yellow */
+  }
+  
