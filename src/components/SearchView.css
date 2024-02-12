@@ -1,6 +1,8 @@
 
-.show-grid-wrapper {
-    margin: 0 10%; /* 3% margin on each side */
+.show-grid-wrapper-SV {
+    margin-left: 10%; /* 10% margin on each side */
+    margin-right: 10%; /* 10% margin on each side */
+    margin-bottom: 10%;
   }
 
   .show-grid {

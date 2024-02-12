@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import './MovieDetails.css';
 
 interface Actor {
   person: { name: string; image: { medium: string } };
+  character: { name: string };
 }
 
 interface Show {
@@ -11,70 +13,121 @@ interface Show {
   name: string;
   image: { medium: string };
   summary: string;
+  genres: string[];
+  rating: { average: number };
   _embedded: { cast: Actor[] };
 }
 
-const MovieDetails: React.FC = () => {
-  const [show, setShow] = useState<Show | null>(null); // State to store the details of the movie
-  const [loading, setLoading] = useState<boolean>(true); // State to track loading state
-  const { searchTerm, id } = useParams<{ searchTerm: string; id: string }>(); // Get the movie ID from URL parameter
-  const navigate = useNavigate(); // Hook for navigation
+const generateStars = (rating: number): string => {
+  const roundedRating = Math.floor(rating);
+  return '★'.repeat(roundedRating);
+};
 
-  // Function to fetch details of the specific movie based on its ID
+const MovieDetails: React.FC = () => {
+  const [show, setShow] = useState<Show | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
-        // Fetch movie details from the TVMaze API
         const response = await axios.get(`https://api.tvmaze.com/shows/${id}?embed=cast`);
-        console.log('Movie Details Response:', response.data); // Log the response data
-        setShow(response.data); // Set the fetched movie details to state
-        setLoading(false); // Set loading to false when data is fetched
+        setShow(response.data);
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching show details:', error); // Log any errors that occur during API request
-        setLoading(false); // Set loading to false in case of error
+        console.error('Error fetching show details:', error);
+        setLoading(false);
       }
     };
 
-    fetchShowDetails(); // Call the function to fetch movie details when component mounts or ID changes
-  }, [id]); // Dependency array with ID to re-fetch movie details when ID changes
+    fetchShowDetails();
+  }, [id]);
 
-  // Function to handle navigation back to the SearchView page
-  const handleGoBack = () => {
-    navigate('/tvapp'); // Navigate to the root path
+  const handleSearch = async () => {
+    if (searchTerm.trim() !== '') {
+      try {
+        const response = await axios.get(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
+        if (response.data && response.data.length > 0) {
+          navigate(`/search/${encodeURIComponent(searchTerm)}`);
+        } else {
+          navigate('/try-again');
+        }
+      } catch (error) {
+        console.error('Error occurred:', error);
+        navigate('/try-again');
+      }
+    }
   };
 
-  // Render loading message while data is being fetched
+  const handleGoBack = () => {
+    if (searchTerm) {
+      navigate(`/search/${encodeURIComponent(searchTerm)}`);
+    } else {
+      navigate('/tvapp');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Render error message if show is not available
   if (!show) {
     return <div>No information available.</div>;
   }
 
   return (
-    <div className="movie-details">
-      <> {/* React fragment to wrap multiple elements */}
-        {show.image && show.image.medium && (
-          <img src={show.image.medium} alt={show.name} />
-        )}
-        {show.name && <h2>{show.name}</h2>}
-        {show.summary ? <p>{show.summary}</p> : <p>No description available.</p>}
-        <h3>Cast</h3>
-        <div className="cast-list">
-          {/* Map through the cast of the movie and display their information */}
-          {show._embedded.cast.map((actor, index) => (
-            <div key={index} className="actor-card">
-              {actor.person.image && actor.person.image.medium && (
-                <img src={actor.person.image.medium} alt={actor.person.name} />
-              )}
-              {actor.person.name && <p>{actor.person.name}</p>}
-            </div>
-          ))}
+    <div>
+      <div className="header-SV">
+        <img src="https://static.tvmaze.com/images/tvm-header-logo.png" alt="Logo" className="logo-SV" />
+        <div className="main-page-content-due">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Enter movie name..."
+            className="search-input-SV"
+          />
+          <button onClick={handleSearch} className="search-button-SV">Search</button>
         </div>
-        <button onClick={handleGoBack}>Go Back to Search</button>
-      </>
+      </div>
+      <div className="button-space">
+        <button onClick={handleGoBack} className="back-to-search-btn"> Back to Search</button>
+      </div>
+      <h1>Movie Details</h1>
+      <div className="movie-details-div">
+        <div className="movie-details-div-left">
+          {show.image && show.image.medium && (
+            <img src={show.image.medium} alt={show.name} />
+          )}
+        </div>
+        <div className="movie-details-div-right">
+          <div className="movie-details-div-right-up">
+            <h2>{show.name}</h2>
+            <p>Rating: <span style={{color: 'rgb(177, 160, 66)'}}>{generateStars(show.rating.average)}</span></p>
+            <p>Genres: {show.genres.join(', ')}</p>
+            <div dangerouslySetInnerHTML={{ __html: show.summary }} />
+          </div>
+          <div className="movie-details-div-right-down">
+            <h3>Cast</h3>
+            <div className="cast-list">
+              {show._embedded.cast.map((actor, index) => (
+                <div key={index} className="actor-card">
+                  {actor.person.image && actor.person.image.medium && (
+                    <img src={actor.person.image.medium} alt={actor.person.name} className="actor-image" />
+                  )}
+                  <div className="actor-info">
+                    <p className="actor-name">{actor.person.name}</p>
+                    <p className="actor-role">as {actor.character.name}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

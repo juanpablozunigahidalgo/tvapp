@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, Link, useParams } from 'react-router-dom'; // Import Link and useParams from react-router-dom
 import axios from 'axios';
 import './SearchView.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 interface Show {
   id: number;
@@ -16,6 +17,7 @@ const SearchView: React.FC = () => {
   const [error, setError] = useState(false);
   const location = useLocation();
   const params = useParams<{ searchTerm: string }>(); // Get the search term from params
+  const navigate = useNavigate(); 
 
   const generateStars = (rating: number): string => {
     const roundedRating = Math.floor(rating);
@@ -40,8 +42,24 @@ const SearchView: React.FC = () => {
     fetchShows();
   }, [params.searchTerm]);
 
-  const handleSearch = () => {
-    console.log('Search term:', searchTerm);
+  const handleSearch = async () => {
+    if (searchTerm.trim() !== '') {
+      try {
+        const response = await axios.get(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
+        console.log('API Response:', response.data); // Log the API response
+        if (response.data && response.data.length > 0) {
+          // Navigate to the search route with the search term
+          navigate(`/search/${encodeURIComponent(searchTerm)}`);
+        } else {
+          // Navigate to the try-again route if no results found
+          navigate('/try-again');
+        }
+      } catch (error) {
+        console.error('Error occurred:', error);
+        // Navigate to the try-again route if an error occurs
+        navigate('/try-again');
+      }
+    }
   };
 
   return (
@@ -64,7 +82,7 @@ const SearchView: React.FC = () => {
           No TV Show found with that name. Either there was an error in the database. Please try again.
         </div>
       ) : (
-        <div className="show-grid-wrapper">
+        <div className="show-grid-wrapper-SV">
           <div className="show-grid">
             {shows.map((show) => (
               <Link key={show.id} to={`/details/${params.searchTerm}/${show.id}`} className="show-card-link">

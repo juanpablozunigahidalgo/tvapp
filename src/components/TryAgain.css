@@ -61,3 +61,15 @@
   .search-button:hover {
     background-color:rgb(10, 58, 52);
   }
+  .no-shows-message {
+
+    color:#ffffff;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    
+  }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './TryAgain.css'; // Import the CSS file
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 interface Show {
   id: number;
@@ -16,6 +17,7 @@ const TryAgain: React.FC = () => {
   const [error, setError] = useState(false);
   const location = useLocation();
   const query = new URLSearchParams(location.search).get('q') || '';
+  const navigate = useNavigate(); 
 
   // Helper function to generate stars based on rating
   const generateStars = (rating: number): string => {
@@ -41,24 +43,39 @@ const TryAgain: React.FC = () => {
     fetchShows();
   }, [query]);
 
-  const handleSearch = () => {
-    // Perform search based on searchTerm
-    console.log('Search term:', searchTerm);
+  const handleSearch = async () => {
+    if (searchTerm.trim() !== '') {
+      try {
+        const response = await axios.get(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
+        console.log('API Response:', response.data); // Log the API response
+        if (response.data && response.data.length > 0) {
+          // Navigate to the search route with the search term
+          navigate(`/search/${encodeURIComponent(searchTerm)}`);
+        } else {
+          // Navigate to the try-again route if no results found
+          navigate('/try-again');
+        }
+      } catch (error) {
+        console.error('Error occurred:', error);
+        // Navigate to the try-again route if an error occurs
+        navigate('/try-again');
+      }
+    }
   };
 
   return (
     <div className="search-view">
-      <div className="header">
-        <img src="https://static.tvmaze.com/images/tvm-header-logo.png" alt="Logo" className="logo" />
-        <div>
+      <div className="header-SV">
+        <img src="https://static.tvmaze.com/images/tvm-header-logo.png" alt="Logo" className="logo-SV" />
+        <div className="main-page-content-due">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Enter movie name..."
-            className="search-input"
+            className="search-input-SV"
           />
-          <button onClick={handleSearch} className="search-button">Search</button>
+          <button onClick={handleSearch} className="search-button-SV">Search</button>
         </div>
       </div>
       {error ? (
