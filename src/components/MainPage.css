@@ -2,7 +2,7 @@ body {
     background-color: black; /* Set the background color of the entire page to black */
   }
   
-  .main-page-container {
+  .main-page-container-MP {
     position: relative;
     display: flex;
     justify-content: center;
@@ -11,30 +11,32 @@ body {
     background-color: transparent; /* Set the background color of the container div to transparent */
   }
   
-  .main-page-content {
+  .main-page-content-MP {
     position: relative;
     display: flex;
     align-items: center;
     background-color: white; /* Set the background color of the content div to white */
     padding: 10px;
     border-radius: 5px;
+    margin-left: 5%;
+    margin-right: 5%;
   }
   
   /* Set minimum width to 600px for large screens */
   @media (min-width: 600px) {
-    .main-page-content {
+    .main-page-content-MP {
       min-width: 450px;
     }
   }
   
   /* Set minimum width to 300px for mobile screens */
   @media (max-width: 599px) {
-    .main-page-content {
-      min-width: 300px;
+    .main-page-content-MP {
+      max-width: 300px;
     }
   }
   
-  .search-input {
+  .search-input-MP {
     flex: 1;
     padding: 8px;
     margin-right: 5px;

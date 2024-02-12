@@ -28,15 +28,15 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <div className="main-page-container">
+    <div className="main-page-container-MP">
       <img src="https://static.tvmaze.com/images/tvm-header-logo.png" alt="Logo" className="llogo" /> {/* Adjust the path to your logo */}
-      <div className="main-page-content">
+      <div className="main-page-content-MP">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Enter movie name..."
-          className="search-input"
+          className="search-input-MP"
         />
         <button onClick={handleSearch} className="search-button">Search</button>
       </div>
