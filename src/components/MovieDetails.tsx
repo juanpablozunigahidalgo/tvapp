@@ -17,7 +17,7 @@ interface Show {
 const MovieDetails: React.FC = () => {
   const [show, setShow] = useState<Show | null>(null); // State to store the details of the movie
   const [loading, setLoading] = useState<boolean>(true); // State to track loading state
-  const { id } = useParams(); // Get the movie ID from URL parameter
+  const { searchTerm, id } = useParams<{ searchTerm: string; id: string }>(); // Get the movie ID from URL parameter
   const navigate = useNavigate(); // Hook for navigation
 
   // Function to fetch details of the specific movie based on its ID

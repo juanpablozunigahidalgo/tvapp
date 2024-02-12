@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useLocation, Link, useParams } from 'react-router-dom'; // Import Link and useParams from react-router-dom
 import axios from 'axios';
 import './SearchView.css';
 
@@ -15,7 +15,7 @@ const SearchView: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(false);
   const location = useLocation();
-  const query = new URLSearchParams(location.search).get('q') || '';
+  const params = useParams<{ searchTerm: string }>(); // Get the search term from params
 
   const generateStars = (rating: number): string => {
     const roundedRating = Math.floor(rating);
@@ -26,7 +26,7 @@ const SearchView: React.FC = () => {
     const fetchShows = async () => {
       try {
         const response = await axios.get(
-          `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`
+          `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(params.searchTerm ?? '')}`
         );
         console.log('JSON Response:', response.data);
         setShows(response.data.map((result: any) => result.show));
@@ -38,7 +38,7 @@ const SearchView: React.FC = () => {
     };
 
     fetchShows();
-  }, [query]);
+  }, [params.searchTerm]);
 
   const handleSearch = () => {
     console.log('Search term:', searchTerm);
@@ -67,7 +67,7 @@ const SearchView: React.FC = () => {
         <div className="show-grid-wrapper">
           <div className="show-grid">
             {shows.map((show) => (
-              <Link key={show.id} to={`/details/${show.id}`} className="show-card-link">
+              <Link key={show.id} to={`/details/${params.searchTerm}/${show.id}`} className="show-card-link">
                 <div className="show-card">
                   {show.image && show.image.medium ? (
                     <img src={show.image.medium} alt={show.name} />

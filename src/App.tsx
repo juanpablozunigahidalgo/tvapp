@@ -10,8 +10,8 @@ function App() {
     <Router basename=""> {/* Wrap your routes with the Router component */}
       <Routes> {/* Use the Routes component to define your routes */}
         <Route path="/tvapp" element={<MainPage />} /> {/* Define a route for the root path, rendering MainPage */}
-        <Route path="/search" element={<SearchView />} /> {/* Define a route for "/search" path, rendering SearchView */}
-        <Route path="/details/:id" element={<MovieDetails />} /> {/* Define a route for "/details/:id" path, rendering MovieDetails */}
+        <Route path="/search/:searchTerm" element={<SearchView />} /> {/* Define a route for "/search" path, rendering SearchView */}
+        <Route path="/details/:searchTerm/:id" element={<MovieDetails/>} /> {/* Define a route for "/details/:id" path, rendering MovieDetails */}
         <Route path="/try-again" element={<TryAgain />} /> {/* Define a route for the root path, rendering MainPage */}
       </Routes>
     </Router>

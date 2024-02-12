@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios for making HTTP requests
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './MainPage.css'; // Import the CSS file
 
 const MainPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSearch = async () => {
     if (searchTerm.trim() !== '') {
@@ -13,12 +13,15 @@ const MainPage: React.FC = () => {
         const response = await axios.get(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
         console.log('API Response:', response.data); // Log the API response
         if (response.data && response.data.length > 0) {
-          navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+          // Navigate to the search route with the search term
+          navigate(`/search/${encodeURIComponent(searchTerm)}`);
         } else {
+          // Navigate to the try-again route if no results found
           navigate('/try-again');
         }
       } catch (error) {
         console.error('Error occurred:', error);
+        // Navigate to the try-again route if an error occurs
         navigate('/try-again');
       }
     }
