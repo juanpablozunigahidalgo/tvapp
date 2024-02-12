@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/tvapp/static/css/main.c9ab95a6.css",
-    "main.js": "/tvapp/static/js/main.21eb0f89.js",
+    "main.css": "/tvapp/static/css/main.8d06e771.css",
+    "main.js": "/tvapp/static/js/main.fa15069c.js",
     "static/js/592.b8156e5d.chunk.js": "/tvapp/static/js/592.b8156e5d.chunk.js",
     "index.html": "/tvapp/index.html",
-    "main.c9ab95a6.css.map": "/tvapp/static/css/main.c9ab95a6.css.map",
-    "main.21eb0f89.js.map": "/tvapp/static/js/main.21eb0f89.js.map",
+    "main.8d06e771.css.map": "/tvapp/static/css/main.8d06e771.css.map",
+    "main.fa15069c.js.map": "/tvapp/static/js/main.fa15069c.js.map",
     "592.b8156e5d.chunk.js.map": "/tvapp/static/js/592.b8156e5d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c9ab95a6.css",
-    "static/js/main.21eb0f89.js"
+    "static/css/main.8d06e771.css",
+    "static/js/main.fa15069c.js"
   ]
 }
