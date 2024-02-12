@@ -3,22 +3,28 @@
     margin: 0 10%; /* 3% margin on each side */
   }
 
-.show-grid {
+  .show-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Update to auto-fit */
     gap: 20px;
-  }
+}
   
   .show-card {
     border: 1px solid #000000;
-    padding: 10px;
+    padding: 0%;
     text-align: left;
     color: white;
   }
   
+  .show-card-link {
+    text-decoration: none; /* Remove underline */
+  }
+
   .show-card img {
     max-width: 100%;
     height: auto;
+    display: block; /* Ensures images behave as block elements */
+    margin: 0 auto; /* Centers the images horizontally */
   }
 
   .show-card .rating-stars {
@@ -32,6 +38,7 @@
     justify-content: space-around;
     margin: 0 10%; /* Same margin as the matrix */
     margin-top: 3%;
+    margin-bottom: 5%;
   }
   
   .logo {
@@ -100,3 +107,13 @@
     }
   }
   
+  @media screen and (max-width: 600px) {
+    /* Apply these styles only on screens narrower than 600px (mobile screens) */
+    .show-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* Display two movies per row */
+    }
+
+    .show-card {
+        width: 100%; /* Set width to 100% to occupy full width of the container */
+    }
+}

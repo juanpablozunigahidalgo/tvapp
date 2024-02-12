@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios';
-import './SearchView.css'; // Import the CSS file
+import './SearchView.css';
 
 interface Show {
   id: number;
   name: string;
-  image: { medium: string } | null; // Update image type to include null
+  image: { medium: string } | null;
   rating: { average: number };
 }
 
@@ -17,7 +17,6 @@ const SearchView: React.FC = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get('q') || '';
 
-  // Helper function to generate stars based on rating
   const generateStars = (rating: number): string => {
     const roundedRating = Math.floor(rating);
     return '★'.repeat(roundedRating);
@@ -29,12 +28,12 @@ const SearchView: React.FC = () => {
         const response = await axios.get(
           `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`
         );
-        console.log('JSON Response:', response.data); // Log the JSON response
+        console.log('JSON Response:', response.data);
         setShows(response.data.map((result: any) => result.show));
-        setError(false); // Reset error state
+        setError(false);
       } catch (error) {
         console.error('Error fetching shows:', error);
-        setError(true); // Set error state to true
+        setError(true);
       }
     };
 
@@ -42,7 +41,6 @@ const SearchView: React.FC = () => {
   }, [query]);
 
   const handleSearch = () => {
-    // Perform search based on searchTerm
     console.log('Search term:', searchTerm);
   };
 
@@ -69,15 +67,17 @@ const SearchView: React.FC = () => {
         <div className="show-grid-wrapper">
           <div className="show-grid">
             {shows.map((show) => (
-              <div key={show.id} className="show-card">
-                {show.image && show.image.medium ? ( // Check if image is not null before accessing 'medium'
-                  <img src={show.image.medium} alt={show.name} />
-                ) : (
-                  <div className="no-image">No Image Available</div>
-                )}
-                <h3>{show.name}</h3>
-                <p className="rating-stars">{show.rating ? generateStars(show.rating.average) : 'N/A'}</p>
-              </div>
+              <Link key={show.id} to={`/details/${show.id}`} className="show-card-link">
+                <div className="show-card">
+                  {show.image && show.image.medium ? (
+                    <img src={show.image.medium} alt={show.name} />
+                  ) : (
+                    <div className="no-image">No Image Available</div>
+                  )}
+                  <h3>{show.name}</h3>
+                  <p className="rating-stars">{show.rating ? generateStars(show.rating.average) : 'N/A'}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
